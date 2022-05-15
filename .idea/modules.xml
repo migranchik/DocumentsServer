@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/DocumentsServer.iml" filepath="$PROJECT_DIR$/DocumentsServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../DocymentsClient/DocymentsClient.iml" filepath="$PROJECT_DIR$/../DocymentsClient/DocymentsClient.iml" />
+    </modules>
+  </component>
+</project>
