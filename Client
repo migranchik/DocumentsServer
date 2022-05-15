@@ -1,0 +1,40 @@
+import java.io.*;
+import java.net.Socket;
+
+public class DocumentsClient {
+    public static void main(String[] args) {
+
+        try (
+                Socket client = new Socket("127.0.0.1", 8000);
+                BufferedWriter writer =
+                        new BufferedWriter(
+                                new OutputStreamWriter(
+                                        client.getOutputStream()));
+                BufferedOutputStream fileOut = new BufferedOutputStream(client.getOutputStream());
+                BufferedReader reader =
+                        new BufferedReader(
+                                new InputStreamReader(client.getInputStream())
+                        );
+                )
+        {
+            writer.write("lox.pdf");
+            writer.newLine();
+            writer.flush();
+            File doc = new File("C:\\Users\\salve\\IdeaProjects\\DocymentsClient\\src\\lox.pdf");
+            FileInputStream fileInputStream = new FileInputStream(doc.getPath());
+            byte[] byteArray = new byte[1024];
+            long lengthDoc = doc.length();
+            System.out.println(lengthDoc);
+            while (lengthDoc > 0) {
+                int i = fileInputStream.read(byteArray);
+                fileOut.write(byteArray, 0, i);
+                lengthDoc -= i;
+            }
+            fileOut.flush();
+            fileInputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+}
