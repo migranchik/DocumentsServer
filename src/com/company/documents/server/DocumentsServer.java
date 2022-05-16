@@ -1,4 +1,4 @@
-package com.company;
+package com.company.documents.server;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -12,29 +12,29 @@ public class DocumentsServer {
             System.out.println("Server started!");
             while (true) {
                 try (
+                        // waiting for connect client
                         Socket socket = serverSocket.accept();
+                        // create buffered writer
                         BufferedWriter writer =
                                 new BufferedWriter(
                                         new OutputStreamWriter(
                                                 socket.getOutputStream()));
-                        BufferedInputStream fileIn = new BufferedInputStream(socket.getInputStream());
+                        // create buffered reader
                         BufferedReader reader =
                                 new BufferedReader(
                                         new InputStreamReader(socket.getInputStream())
                                 );
+                        // create buffered input stream for file
+                        BufferedInputStream inputFileReader = new BufferedInputStream(socket.getInputStream());
                 ) {
+                    // read file name
                     String fileName = reader.readLine();
-                    byte[] byteArray = new byte[1024];
-                    File document = new File("./" + fileName);
-                    document.createNewFile();
-                    FileOutputStream fos = new FileOutputStream(document);
-                    while(true){
-                        int i = fileIn.read(byteArray);
-                        fos.write(byteArray, 0, i);
-                        if(i < 1024)
-                            break;
-                    }
-                    fos.close();
+                    // downloading file
+                    DocumentsDownloader downloader = new DocumentsDownloader(inputFileReader, fileName);
+                    downloader.download();
+
+                } catch (IndexOutOfBoundsException e){
+                    e.printStackTrace();
                 }
             }
         } catch (IOException e){
